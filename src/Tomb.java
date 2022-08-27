@@ -24,11 +24,11 @@ public class Tomb implements ActionListener {
     JButton nextNum =new JButton();
 
     boolean ambo=false,terno=false,quaderna=false,quintina=false,tombola=false;
-    final private File aAmbo= new File("src/audio/Ambo.wav");
-    final private  File aTerno= new File("src/audio/Terno.wav");
-    final private File aQuaderna= new File("src/audio/Quaderna.wav");
-    final private  File aQuintina= new File("src/audio/Quintina.wav");
-    final private File aTombola= new File("src/audio/Tombola.wav");
+    final private File aAmbo= new File("audio/Ambo.wav");
+    final private  File aTerno= new File("audio/Terno.wav");
+    final private File aQuaderna= new File("audio/Quaderna.wav");
+    final private  File aQuintina= new File("audio/Quintina.wav");
+    final private File aTombola= new File("audio/Tombola.wav");
 
 
     Tomb() {
