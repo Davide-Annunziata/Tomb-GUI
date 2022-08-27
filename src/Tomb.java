@@ -24,11 +24,11 @@ public class Tomb implements ActionListener {
     JButton nextNum =new JButton();
 
     boolean ambo=false,terno=false,quaderna=false,quintina=false,tombola=false;
-    final private File aAmbo= new File("audio/Ambo.wav");
-    final private  File aTerno= new File("audio/Terno.wav");
-    final private File aQuaderna= new File("audio/Quaderna.wav");
-    final private  File aQuintina= new File("audio/Quintina.wav");
-    final private File aTombola= new File("audio/Tombola.wav");
+    final private File aAmbo= new File("src/audio/Ambo.wav");
+    final private  File aTerno= new File("src/audio/Terno.wav");
+    final private File aQuaderna= new File("src/audio/Quaderna.wav");
+    final private  File aQuintina= new File("src/audio/Quintina.wav");
+    final private File aTombola= new File("src/audio/Tombola.wav");
 
 
     Tomb() {
@@ -92,13 +92,13 @@ public class Tomb implements ActionListener {
         textLabel.setForeground(new Color(0x123456));
         textLabel.setText("Tombola");
         if(e.getSource()==nextNum) {
-            int n;
-            do {
+            int n=0;
+            do{
                 n = rand.nextInt(90);
-            } while (numbers[n].getText() == String.valueOf(n + 1));
+            } while (numbers[n].getText() !="");
 
-            numbers[n].setText(String.valueOf(n + 1));
-            lastNumPanel.setText(String.valueOf(n+1));
+            numbers[n].setText(Integer.toString(n + 1));
+            lastNumPanel.setText(Integer.toString(n + 1));
             try {
                 check();
             } catch (Exception ignored){}
