@@ -39,23 +39,28 @@ public class Tomb implements ActionListener {
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
-
         textLabel.setText("Tombola");
         textLabel.setBackground(Color.BLACK);
         textLabel.setForeground(new Color(0x123456));
         textLabel.setHorizontalAlignment(JLabel.CENTER);
         textLabel.setFont(new Font("JetBrains mono", Font.PLAIN, 62));
         textLabel.setOpaque(true);
+        //Creare nuova partita alla pressione del tansto N
+        textLabel.getInputMap().put(KeyStroke.getKeyStroke("N"),"newGame");
+        textLabel.getActionMap().put("newGame",new newGame());
+
+        //Estrarre un nuovo numero alla pressione del tasto E
+        textLabel.getInputMap().put(KeyStroke.getKeyStroke("E"),"fastExtraction");
+        textLabel.getActionMap().put("fastExtraction",new fastEstraction());
 
         textPanel.setPreferredSize(new Dimension(1000, 100));
         textPanel.setLayout(new BorderLayout());
 
-
+        //bottone estai
         nextNum.setBounds(0,0,10,10);
         nextNum.setText("Estrai");
         nextNum.setFocusable(false);
         nextNum.addActionListener(this);
-
 
         lastNumPanel.setText("");
         lastNumPanel.setBackground(Color.BLACK);
@@ -64,17 +69,16 @@ public class Tomb implements ActionListener {
 
         lastNumPanel.setFont(new Font("JetBrains mono", Font.PLAIN, 62));
         lastNumPanel.setOpaque(true);
-
+        //Inizializzatione label contenenti i numeri del tabellone
         for (int i = 0; i < 90; i++) {
             numbers[i] = new JLabel();
             numbers[i].setText("");
             numbers[i].setFont(new Font("JetBrains mono", Font.BOLD, 24));
-            numbers[i].setBackground(Color.BLUE);
             numbers[i].setSize(30, 30);
             numbers[i].setBorder(BorderFactory.createLineBorder(Color.black,2));
+            numbers[i].setOpaque(true);
             numbersPanel.add(numbers[i]);
         }
-
 
         numbersPanel.setLayout(new GridLayout(9, 10));
         numbersPanel.setOpaque(true);
@@ -87,12 +91,13 @@ public class Tomb implements ActionListener {
         frame.setVisible(true);
     }
 
+    //Estrai un nuovo numero fina a quando il numero non è già uscito
     @Override
     public void actionPerformed(ActionEvent e) {
         textLabel.setForeground(new Color(0x123456));
         textLabel.setText("Tombola");
         if(e.getSource()==nextNum) {
-            int n=0;
+            int n;
             do{
                 n = rand.nextInt(90);
             } while (numbers[n].getText() !="");
@@ -100,13 +105,14 @@ public class Tomb implements ActionListener {
             numbers[n].setText(Integer.toString(n + 1));
             lastNumPanel.setText(Integer.toString(n + 1));
             try {
-                check();
+                finalScreen(check());
             } catch (Exception ignored){}
         }
     }
 
-    public void check() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        int c=0,y=0,z=5;  // c=contatore
+    //controlla se il giocatore ha fatto qualcose, poi contalla se il giocatore ha vinto e ritorna quale casella
+    public int check() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        int c=0,y=0,z=5,v=0;  // c=contatore , v=tabella vincene
         Color colore = null;
         do{
             for(int i=y;i<z;i++){
@@ -163,14 +169,15 @@ public class Tomb implements ActionListener {
         //controlla le prime 5 colonne
         for(int j=0; j<9;j++){
             if(j==0){
-                c=0;
                 colore=Color.red;
             }else if(j==3){
                 c=0;
                 colore=Color.blue;
+                v++;
             }else if(j==6){
                 c=0;
                 colore=new Color(0x0BA000);
+                v++;
             }
 
             for(int i=y;i<z;i++){
@@ -180,7 +187,10 @@ public class Tomb implements ActionListener {
                 }
             }
 
-            if(c==15 && !tombola){end();}
+            if(c==15 && !tombola){
+                end();
+                return v;
+            }
 
             y+=10;
             z+=10;
@@ -192,28 +202,71 @@ public class Tomb implements ActionListener {
             if(j==0){
                 colore=Color.ORANGE;
                 c=0;
+                v++;
             }else if(j==3){
                 colore=Color.pink;
                 c=0;
+                v++;
             }else if(j==6){
                 colore=new Color(0xC105FF);
                 c=0;
+                v++;
             }
 
             for(int i=y;i<z;i++){
-                numbers[i].setBackground(colore);
                 numbers[i].setForeground(colore);
                 if( numbers[i].getText()!=""){
                     c++;
                 }
             }
 
-            if(c==15 && !tombola){end();}
+            if(c==15 && !tombola){
+                end();
+                return v;
+            }
+            y+=10;
+            z+=10;
+        }
+        return -1;
+    }
+
+    private void finalScreen(int x){
+        int y=0,z=5;
+        switch(x){
+            case 0:
+                break;
+            case 1:
+                y=30;
+                z=35;
+                break;
+            case 2:
+                y=60;
+                z=65;
+                break;
+            case 3:
+                y=5;
+                z=10;
+                break;
+            case 4:
+                y=35;
+                z=40;
+                break;
+            case 5:
+                y=65;
+                z=70;
+                break;
+            case -1:
+                return;
+        }
+        for(int j=0; j<3;j++){
+            for(int i=y;i<z;i++){
+                numbers[i].setBackground(Color.GREEN);
+            }
             y+=10;
             z+=10;
         }
     }
-
+   //dise al giocatore se ha fatto tombola
     private void end() {
         System.out.println("hai fatto tombola");
         tombola=true;
@@ -228,5 +281,32 @@ public class Tomb implements ActionListener {
         nextNum.setEnabled(false);
         textLabel.setText("Hai fatto Tombola");
         textPanel.setForeground(Color.red);
+    }
+
+    class newGame extends AbstractAction{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            frame.dispose();
+            new Tomb();
+        }
+    }
+
+    class fastEstraction extends AbstractAction{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(!tombola){
+                textLabel.setForeground(new Color(0x123456));
+                textLabel.setText("Tombola");
+                int n;
+                do{
+                    n = rand.nextInt(90);
+                } while (!numbers[n].getText().equals(""));
+                numbers[n].setText(Integer.toString(n + 1));
+                lastNumPanel.setText(Integer.toString(n + 1));
+                try {
+                    finalScreen(check());
+                } catch (Exception ignored){}
+            }
+        }
     }
 }
