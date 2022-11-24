@@ -100,7 +100,7 @@ public class Tomb implements ActionListener {
             int n;
             do{
                 n = rand.nextInt(90);
-            } while (numbers[n].getText() !="");
+            } while (!numbers[n].getText().equals(""));
 
             numbers[n].setText(Integer.toString(n + 1));
             lastNumPanel.setText(Integer.toString(n + 1));
@@ -116,7 +116,7 @@ public class Tomb implements ActionListener {
         Color colore = null;
         do{
             for(int i=y;i<z;i++){
-                if( numbers[i].getText()!=""){
+                if(!numbers[i].getText().equals("")){
                     c++;
                 }
             }
@@ -124,24 +124,28 @@ public class Tomb implements ActionListener {
             if (c==2 && !ambo){
                 System.out.println("hai fatto ambo");
                 ambo=true;
+                textLabel.setText("Hai fatto ambo");
+                textLabel.setForeground(Color.red);
                 AudioInputStream input = AudioSystem.getAudioInputStream(aAmbo);
                 Clip clip= AudioSystem.getClip();
                 clip.open(input);
                 clip.start();
-                textLabel.setText("Hai fatto ambo");
-                textLabel.setForeground(Color.red);
             }else if(c==3 && !terno){
+
                 System.out.println("hai fatto terno");
                 terno=true;
+                textLabel.setText("Hai fatto terno");
+                textLabel.setForeground(Color.red);
                 AudioInputStream input = AudioSystem.getAudioInputStream(aTerno);
                 Clip clip= AudioSystem.getClip();
                 clip.open(input);
                 clip.start();
-                textLabel.setText("Hai fatto terno");
-                textLabel.setForeground(Color.red);
+
             }else if(c==4 && !quaderna){
                 System.out.println("hai fatto quaderna");
                 quaderna=true;
+                textLabel.setText("Hai fatto quaderna");
+                textLabel.setForeground(Color.red);
                 AudioInputStream input = AudioSystem.getAudioInputStream(aQuaderna);
                 Clip clip= AudioSystem.getClip();
                 clip.open(input);
@@ -152,6 +156,8 @@ public class Tomb implements ActionListener {
             }else if(c==5 && !quintina){
                 System.out.println("hai fatto quintina");
                 quintina=true;
+                textLabel.setText("Hai fatto quintina");
+                textLabel.setForeground(Color.red);
                 AudioInputStream input = AudioSystem.getAudioInputStream(aQuintina);
                 Clip clip= AudioSystem.getClip();
                 clip.open(input);
@@ -182,7 +188,7 @@ public class Tomb implements ActionListener {
 
             for(int i=y;i<z;i++){
                 numbers[i].setForeground(colore);
-                if( numbers[i].getText()!=""){
+                if(!numbers[i].getText().equals("")){
                     c++;
                 }
             }
@@ -215,7 +221,7 @@ public class Tomb implements ActionListener {
 
             for(int i=y;i<z;i++){
                 numbers[i].setForeground(colore);
-                if( numbers[i].getText()!=""){
+                if(!numbers[i].getText().equals("")){
                     c++;
                 }
             }
@@ -266,10 +272,12 @@ public class Tomb implements ActionListener {
             z+=10;
         }
     }
-   //dise al giocatore se ha fatto tombola
+   //die al giocatore se ha fatto tombola
     private void end() {
         System.out.println("hai fatto tombola");
         tombola=true;
+        textLabel.setText("Hai fatto Tombola");
+        textPanel.setForeground(Color.red);
         try {
             AudioInputStream input = AudioSystem.getAudioInputStream(aTombola);
             Clip clip = AudioSystem.getClip();
@@ -279,8 +287,7 @@ public class Tomb implements ActionListener {
 
 
         nextNum.setEnabled(false);
-        textLabel.setText("Hai fatto Tombola");
-        textPanel.setForeground(Color.red);
+
     }
 
     class newGame extends AbstractAction{
